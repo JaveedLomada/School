@@ -18,27 +18,34 @@ export default function AddSchoolPage() {
   const [msg, setMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (data: FormValues) => {
-    try {
-      setLoading(true);
-      setMsg(null);
-     const fd = new FormData();
-(['name','address','city','state','contact','email_id'] as const).forEach((k) =>
-        fd.append(k, (data as any)[k])
-      );
-      if (data.image && data.image[0]) fd.append('image', data.image[0]);
+ const onSubmit = async (data: FormValues) => {
+  try {
+    setLoading(true);
+    setMsg(null);
+    const fd = new FormData();
 
-      const res = await fetch('/api/schools', { method: 'POST', body: fd });
-      const json = await res.json();
-      if (!json.ok) throw new Error(json.error || 'Failed');
-      setMsg('✅ School added successfully');
-      reset();
-    } catch (e: unknown) {
+    (['name','address','city','state','contact','email_id'] as const).forEach((k) =>
+      fd.append(k, data[k] as string)
+    );
+
+    if (data.image && data.image[0]) fd.append('image', data.image[0]);
+
+    const res = await fetch('/api/schools', { method: 'POST', body: fd });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error || 'Failed');
+    setMsg('✅ School added successfully');
+    reset();
+  } catch (e) {
+    if (e instanceof Error) {
       setMsg('❌ ' + e.message);
-    } finally {
-      setLoading(false);
+    } else {
+      setMsg('❌ Something went wrong');
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div style={{margin:"auto" , backgroundColor:"white", boxShadow:"0 0  5px 2px gray" , width:"400px" , borderRadius:"8px" , padding:"10px 20px" , boxSizing:"border-box"}}>
