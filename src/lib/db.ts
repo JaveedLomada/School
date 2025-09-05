@@ -8,7 +8,7 @@ const pool = mysql.createPool({
   port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 3306,
 });
 
-export async function query<T = any>(sql: string, params: any[] = []) {
+export async function query<T = any>(sql: string, params: unknown[] = []) {
   const [rows] = await pool.execute(sql, params);
   return rows as T;
 }
