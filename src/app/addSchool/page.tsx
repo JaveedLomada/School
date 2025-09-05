@@ -50,7 +50,7 @@ export default function AddSchoolPage() {
             <label>
               School Name
             </label>
-            <div className="col-span-2">
+            <div>
               <input
                 style={{padding:"6px" , width:"90%"}}
                 {...register('name', { required: 'School name is required' })}
@@ -146,7 +146,7 @@ export default function AddSchoolPage() {
                 accept="image/*"
                 {...register('image', { required: 'Image is required' })}
               />
-              {errors.image && <p>{errors.image.message as string}</p>}
+              {errors.image && <p>{errors.image.message as unknown}</p>}
             </div>
           </div>
 
