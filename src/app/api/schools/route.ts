@@ -11,7 +11,7 @@ export async function GET() {
       'SELECT id, name, address, city, state, contact, image, email_id FROM schools ORDER BY id DESC'
     );
     return NextResponse.json({ ok: true, data: rows });
-  } catch (err: any) {
+  } catch (err: string) {
     return NextResponse.json({ ok: false, error: err.message }, { status: 500 });
   }
 }
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     );
 
     return NextResponse.json({ ok: true, message: 'School added successfully.' });
-  } catch (err: any) {
+  } catch (err: string) {
     return NextResponse.json({ ok: false, error: err.message }, { status: 500 });
   }
 }
