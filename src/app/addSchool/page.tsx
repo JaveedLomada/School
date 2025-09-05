@@ -33,7 +33,7 @@ export default function AddSchoolPage() {
       if (!json.ok) throw new Error(json.error || 'Failed');
       setMsg('✅ School added successfully');
       reset();
-    } catch (e: string) {
+    } catch (e: unknown) {
       setMsg('❌ ' + e.message);
     } finally {
       setLoading(false);
