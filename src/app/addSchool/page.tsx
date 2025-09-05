@@ -45,7 +45,7 @@ export default function AddSchoolPage() {
   <h2 className="text-3xl font-bold text-center mb-6 text-blue-700">Add School</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Each row = label left, input right */}
+        
           <div className="grid grid-cols-3 items-center gap-6">
             <label className="text-xl font-semibold text-gray-800 text-right">
               School Name
