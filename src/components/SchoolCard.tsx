@@ -11,9 +11,9 @@ export default function SchoolCard({ s }: { s: School }) {
         <Image
           src={s.image}
           alt={s.name}
-          width={112}   // fixed width (28 * 4 = 112px)
-          height={112}  // fixed height
-          className="object-cover rounded-md"
+          width={112}   
+          height={112} 
+          
         />
       </div>
 
