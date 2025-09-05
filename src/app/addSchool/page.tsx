@@ -24,9 +24,11 @@ export default function AddSchoolPage() {
       setMsg(null);
       const fd = new FormData();
       (['name','address','city','state','contact','email_id'] as const).forEach((k) =>
-        fd.append(k, (data as string)[k])
+         fd.append(k, (data as Record<string, any>)[k]);
       );
-      if (data.image && data.image[0]) fd.append('image', data.image[0]);
+    if ((data as Record<string, any>).image?.[0]) {
+  fd.append('image', (data as Record<string, any>).image[0]);
+}
 
       const res = await fetch('/api/schools', { method: 'POST', body: fd });
       const json = await res.json();
