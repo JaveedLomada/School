@@ -1,0 +1,173 @@
+
+'use client';
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+
+type FormValues = {
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  contact: string;
+  email_id: string;
+  image: FileList;
+};
+
+export default function AddSchoolPage() {
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>();
+  const [msg, setMsg] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = async (data: FormValues) => {
+    try {
+      setLoading(true);
+      setMsg(null);
+      const fd = new FormData();
+      (['name','address','city','state','contact','email_id'] as const).forEach((k) =>
+        fd.append(k, (data as any)[k])
+      );
+      if (data.image && data.image[0]) fd.append('image', data.image[0]);
+
+      const res = await fetch('/api/schools', { method: 'POST', body: fd });
+      const json = await res.json();
+      if (!json.ok) throw new Error(json.error || 'Failed');
+      setMsg('✅ School added successfully');
+      reset();
+    } catch (e: any) {
+      setMsg('❌ ' + e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={{margin:"auto" , backgroundColor:"white", boxShadow:"0 0  5px 2px gray" , width:"400px" , borderRadius:"8px" , padding:"10px 20px" , boxSizing:"border-box"}}>
+  <h2 className="text-3xl font-bold text-center mb-6 text-blue-700">Add School</h2>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Each row = label left, input right */}
+          <div className="grid grid-cols-3 items-center gap-6">
+            <label className="text-xl font-semibold text-gray-800 text-right">
+              School Name
+            </label>
+            <div className="col-span-2">
+              <input
+                style={{padding:"6px" , width:"90%"}}
+                {...register('name', { required: 'School name is required' })}
+              />
+              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 items-center gap-6">
+            <label className="text-xl font-semibold text-gray-800 text-right">
+              Address
+            </label>
+            <div className="col-span-2">
+              <textarea
+                style={{padding:"6px" , width:"90%"}}
+
+                rows={3}
+                {...register('address', { required: 'Address is required' })}
+              />
+              {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 items-center gap-6">
+            <label className="text-xl font-semibold text-gray-800 text-right">
+              City
+            </label>
+            <div className="col-span-2">
+              <input
+                  style={{padding:"6px" , width:"90%"}}
+                {...register('city', { required: 'City is required' })}
+              />
+              {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city.message}</p>}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 items-center gap-6">
+            <label className="text-xl font-semibold text-gray-800 text-right">
+              State
+            </label>
+            <div className="col-span-2">
+              <input
+               style={{padding:"6px" , width:"90%"}}
+                {...register('state', { required: 'State is required' })}
+              />
+              {errors.state && <p className="text-red-500 text-sm mt-1">{errors.state.message}</p>}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 items-center gap-6">
+            <label className="text-xl font-semibold text-gray-800 text-right">
+              Contact
+            </label>
+            <div className="col-span-2">
+              <input
+                inputMode="numeric"
+               style={{padding:"6px" , width:"90%"}}
+
+                {...register('contact', {
+                  required: 'Contact is required',
+                  pattern: { value: /^\d{7,15}$/, message: 'Enter valid 7-15 digit number' },
+                })}
+              />
+              {errors.contact && <p className="text-red-500 text-sm mt-1">{errors.contact.message}</p>}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 items-center gap-6">
+            <label className="text-xl font-semibold text-gray-800 text-right">
+              Email
+            </label>
+            <div className="col-span-2">
+              <input
+                type="email"
+               style={{padding:"6px" , width:"90%"}}
+
+                {...register('email_id', {
+                  required: 'Email is required',
+                  pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Enter valid email' },
+                })}
+              />
+              {errors.email_id && <p className="text-red-500 text-sm mt-1">{errors.email_id.message}</p>}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 items-center gap-6">
+            <label className="text-xl font-semibold text-gray-800 text-right">
+              School Image
+            </label>
+            <div className="col-span-2">
+              <input
+                type="file"
+                accept="image/*"
+                {...register('image', { required: 'Image is required' })}
+              />
+              {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image.message as string}</p>}
+            </div>
+          </div>
+
+          {/* Submit */}
+          <div className="text-center pt-8">
+            <button
+              type="submit"
+              disabled={loading}
+             style={{backgroundColor:"green" , color:"white" , padding:"5px 10px" , border:"none" , borderRadius:"5px" , marginTop:"5px"}}              
+            >
+              {loading ? 'Saving…' : 'Save School'}
+            </button>
+          </div>
+
+          {msg && <p className="text-center mt-4 text-base">{msg}</p>}
+        </form>
+      
+    </div>
+  );
+}
+
+
+
+
