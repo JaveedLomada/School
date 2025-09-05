@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     );
 
     return NextResponse.json({ ok: true, message: 'School added successfully.' });
-  } catch (err: string) {
+  } catch (err: unknown) {
     return NextResponse.json({ ok: false, error: err.message }, { status: 500 });
   }
 }
