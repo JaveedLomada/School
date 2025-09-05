@@ -24,7 +24,7 @@ export default function AddSchoolPage() {
       setMsg(null);
       const fd = new FormData();
       (['name','address','city','state','contact','email_id'] as const).forEach((k) =>
-        fd.append(k, (data as unknown)[k])
+        fd.append(k, (data as any)[k])
       );
       if (data.image && data.image[0]) fd.append('image', data.image[0]);
 
